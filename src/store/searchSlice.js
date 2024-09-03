@@ -22,16 +22,8 @@ const searchSlice = createSlice({
   name: "search",
   initialState: {
     searchResults: '',
-    selectedColors: [],
     status: "idle",
     error: null,
-  },
-  reducers: {
-    addColor(state, action) {
-      if (state.selectedColors.length < 2) {
-        state.selectedColors.push(action.payload);
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,5 +41,4 @@ const searchSlice = createSlice({
   },
 });
 
-export const { addColor } = searchSlice.actions;
 export default searchSlice.reducer;

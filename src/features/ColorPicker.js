@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HexColorPicker } from "react-colorful";
-import { selectColor, combineColors } from "../store/colorSlice";
+import { combineColors, selectColor } from "../store/colorSlice";
+import { ColorPickerContainer, SelectedColorsText } from '../styles/StyledFeatures';
 
 const ColorPicker = () => {
   const dispatch = useDispatch();
@@ -13,15 +14,16 @@ const ColorPicker = () => {
 
   useEffect(() => {
     if (selectedColors.length === 2) {
-      dispatch(combineColors());
+        dispatch(combineColors());
     }
-  }, [selectedColors, dispatch]);
+}, [selectedColors, dispatch]);
+
 
   return (
-    <div>
+    <ColorPickerContainer>
       <HexColorPicker color={selectedColors[0]} onChange={handleColorChange} />
-      <p>Selected Colors: {`${selectedColors[0]} and ${selectedColors[1]}`}</p>
-    </div>
+      <SelectedColorsText>Selected Colors: {`${selectedColors[0]} and ${selectedColors[1]}`}</SelectedColorsText>
+    </ColorPickerContainer>
   );
 };
 
