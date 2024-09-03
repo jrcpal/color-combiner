@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HexColorPicker } from "react-colorful";
 import { selectColor, combineColors } from "../store/colorSlice";
@@ -9,10 +9,13 @@ const ColorPicker = () => {
 
   const handleColorChange = (color) => {
     dispatch(selectColor(color));
-    if (selectedColors.length === 1) {
+  };
+
+  useEffect(() => {
+    if (selectedColors.length === 2) {
       dispatch(combineColors());
     }
-  };
+  }, [selectedColors, dispatch]);
 
   return (
     <div>

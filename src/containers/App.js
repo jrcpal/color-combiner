@@ -1,7 +1,7 @@
 import React from 'react';
-import ColorPicker from './components/ColorPicker';
-import ColorSearch from './components/ColorSearch';
-import CombinedColorDisplay from './components/CombinedColorDisplay';
+import ColorPicker from '../features/ColorPicker';
+import ColorSearch from '../features/ColorSearch';
+import CombinedColorDisplay from '../features/CombinedColorDisplay';
 
 const App = () => {
   return (

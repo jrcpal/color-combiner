@@ -1,38 +1,55 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchColors } from "../store/searchSlice";
+import { fetchColorInfo } from "../store/searchSlice";
 import { selectColor, combineColors } from "../store/colorSlice";
 
 const ColorSearch = () => {
-  const [query, setQuery] = useState("");
+  const [hexCode, setHexCode] = useState("");
   const dispatch = useDispatch();
   const searchResults = useSelector((state) => state.search.searchResults);
+  const selectedColors = useSelector((state) => state.search.selectedColors);
+  const status = useSelector((state) => state.search.status);
 
-  const handleSearch = () => {
-    dispatch(searchColors(query));
+  const isValidHex = (hex) => {
+    return /^#?[0-9A-F]{6}$/i.test(hex);
   };
 
-  const handleSelectColor = (color) => {
-    dispatch(selectColor(color));
-    dispatch(combineColors());
+  const handleSearch = () => {
+    if (isValidHex(hexCode)) {
+      dispatch(fetchColorInfo(hexCode.replace("#", "").trim()));
+    } else {
+      alert("Please enter a valid 6-character hex code.");
+    }
+  };
+
+  const handleAddColor = () => {
+    if (searchResults) {
+      dispatch(selectColor(searchResults));
+      if (selectedColors.length === 1) {
+        dispatch(combineColors());
+      }
+    }
   };
 
   return (
     <div>
       <input
         type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for a color"
+        value={hexCode}
+        onChange={(e) => setHexCode(e.target.value)}
+        placeholder="Enter hex code (e.g., 0047AB)"
       />
-      <button onClick={handleSearch}>Search</button>
-      <ul>
-        {searchResults.map((color) => (
-          <li key={color.hex} onClick={() => handleSelectColor(color.hex)}>
-             {color.name} - {color.hex}
-          </li>
-        ))}
-      </ul>
+      <button onClick={handleSearch}>Get Color Info</button>
+      {status === "loading" && <p>Loading...</p>}
+      {status === "succeeded" && (
+        <div>
+          <p>Found color: {searchResults}</p>
+          <button onClick={handleAddColor}>Select Color</button>
+        </div>
+      )}
+      {status === "failed" && (
+        <p>Error loading color info. Please try again.</p>
+      )}
     </div>
   );
 };
